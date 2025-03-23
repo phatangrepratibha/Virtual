@@ -15,7 +15,7 @@ const Home = () => {
       <Pslider />
       <Hero />
       
-      <Categories />
+   
 
  <div className="card card-side bg-base-100 shadow-sm ml-5 mt-7">
     <div className="card-image">
@@ -27,8 +27,8 @@ const Home = () => {
   </div>
 </div>
 
-
-<div className="poster w-full mt-10">
+<Categories />
+<div className="poster w-full mt-25">
   <img
     src="image/d2.jpeg" // Replace with your image path
     alt="h"

@@ -15,7 +15,7 @@ const Categories = () => {
   ];
 
   return (
-    <div className="py-16 px-6 md:px-20">
+    <div className="py-16 px-6 md:px-20 mt-20">
       <h2 className="text-4xl font-extrabold text-gray-800 text-center mb-10">
         {subcategoryParam ? `Select Category for ${subcategoryParam}` : 
          categoryParam ? "Choose Subcategory" : "Explore Categories"}
