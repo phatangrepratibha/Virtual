@@ -1,20 +1,44 @@
 import Fashion from "../models/fashion-model.js";
 
+const validCategories = ['men', 'women', 'kid', 'sport'];
+const validSubcategories = ['tshirt', 'top', 'bottom', 'outwear', 'innerwear', 'short', 'hoodie'];
+
 export const fashion = async (req, res) => {
   try {
-    const { category, subcategory } = req.query;
+    const { search, category, subcategory } = req.query;
     const filter = {};
-    
-    if (category) filter.category = category.toLowerCase();
-    if (subcategory) filter.subcategory = subcategory.toLowerCase();
+
+    // Handle direct category/subcategory filters
+    if (category) filter.category = category;
+    if (subcategory) filter.subcategory = subcategory;
+
+    // Handle search query parsing
+    if (search) {
+      const searchTerms = search.toLowerCase().split(" ");
+      
+      // Detect category/subcategory pairs in search
+      const detectedCategory = searchTerms.find(term => validCategories.includes(term));
+      const detectedSubcategory = searchTerms.find(term => validSubcategories.includes(term));
+      
+      if (detectedCategory && detectedSubcategory) {
+        filter.category = detectedCategory;
+        filter.subcategory = detectedSubcategory;
+      } else {
+        // Fallback to text search
+        filter.$or = [
+          { name: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } }
+        ];
+      }
+    }
 
     const products = await Fashion.find(filter);
     res.status(200).json(products);
-    
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
-};  
+};
+
 
 
 export const getFashionById=async(req,res)=>{

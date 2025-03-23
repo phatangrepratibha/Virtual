@@ -4,10 +4,9 @@ import Hero from "./Hero";
 import Categories from "./Categories";
 import AboutUs from "./AboutUs";
 import Feature from "./Feature";
-import AboutHome from "./AboutHome";
 import Pslider from "./Pslider";
 import Slider from "./Slider";
-import Avatar from "./Avatar";
+
 
 const Home = () => {
   return (
@@ -19,6 +18,7 @@ const Home = () => {
       <Categories />
     {/* <AboutHome/> */}
      <Feature/>
+     <AboutUs/>
  
     </>
   );

@@ -4,7 +4,7 @@ const SubCategories = ({ currentCategory }) => {
   const subcategories = {
     men: ["tshirt", "top", "bottom", "outwear", "innerwear", "short"],
     women: ["tshirt", "top", "bottom", "outwear", "innerwear", "short"],
-    kid: ["tshirt", "top", "bottom", "outwear", "innerwear"],
+    kid: ["tshirt", "top", "bottom", "outwear", "innerwear", "hoodie"],
     sport: ["tshirt", "top", "bottom", "outwear", "short"]
   };
 
