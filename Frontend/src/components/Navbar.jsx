@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-base-100 sticky top-0 z-50 bg-white shadow-md px-6">
+    <div className="navbar bg-base-100 sticky top-0 z-40 bg-white shadow-md px-6">
       {/* Left Side */}
       <div className="flex-1 flex space-x-6">
         <Link to="/" className="btn btn-ghost mt-3 text-4xl" style={{ fontFamily: "Courgette" }}>
@@ -49,7 +49,7 @@ const Navbar = () => {
       </div>
 
       {/* Right Side - Cart and Profile */}
-      <div className="flex-none ml-0 flex space-x-3">
+      <div className="flex-none ml-2 flex space-x-3">
         {/* Cart */}
         <div className="dropdown dropdown-end">
           <button className="btn btn-ghost btn-circle" onClick={() => navigate("/cart")}>
