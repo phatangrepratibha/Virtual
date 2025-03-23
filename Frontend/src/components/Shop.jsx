@@ -52,16 +52,14 @@ export const Shop = () => {
                   </div>
                   <div
                     className="bg-gray-200 p-2 rounded-full cursor-pointer hover:bg-gray-300 transition"
-                    onClick={() => navigate(`/try-on?clothingImage=${encodeURIComponent(val.image)}`)}
-                  >
+                    onClick={() => navigate(`/try-on?clothingImage=${encodeURIComponent(val.image)}`)}>
                     <FaCamera className="text-black text-lg" />
                   </div>
                 </div>
 
                 <div 
                   className="h-92 cursor-pointer" 
-                  onClick={() => navigate(`/product/${val._id}`)}
-                >
+                  onClick={() => navigate(`/product/${val._id}`)}>
                   <img 
                     src={val.image} 
                     alt={val.name} 
