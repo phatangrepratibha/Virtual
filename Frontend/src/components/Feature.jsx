@@ -5,7 +5,7 @@ const Feature = () => {
   return (
     <>
 
-   <section className="features-section">
+   <section className="features-section mt-15">
         <h2>Why Choose Us?</h2>
         <div className="features-grid">
           <div className="feature-card">

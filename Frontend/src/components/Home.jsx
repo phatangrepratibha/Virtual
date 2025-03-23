@@ -19,16 +19,28 @@ const Home = () => {
 
  <div className="card card-side bg-base-100 shadow-sm ml-5 mt-7">
     <div className="card-image">
-    <img src="image/z9.jpg" alt="Movie "/>
+    <img src="image/z2.jpg" alt="Movie "/>
     </div>
 
-  <div className="card-body mt-10">
+  <div className="card-body ">
       <img src="image/z6.jpg" alt="Movie"  />
   </div>
 </div>
+
+
+<div className="poster w-full mt-10">
+  <img
+    src="image/d2.jpeg" // Replace with your image path
+    alt="h"
+    className="w-full h-auto max-h-[700px] object-cover"
+  />
+</div>
     {/* <AboutHome/> */}
+    <AboutUs/>
+
+  
      <Feature/>
-     <AboutUs/>
+   
 
    
     </>
