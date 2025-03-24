@@ -18,7 +18,7 @@ const Product = () => {
     28: 1.1,
     30: 1.15,
     32: 1.2,
-    34: 1.25
+    34: 1.25,
   };
 
   useEffect(() => {
@@ -28,7 +28,8 @@ const Product = () => {
         const response = await fetch(`http://localhost:3000/fashion/${id}`);
 
         if (response.status === 404) throw new Error("Product not found");
-        if (!response.ok) throw new Error(`Failed to fetch (Status: ${response.status})`);
+        if (!response.ok)
+          throw new Error(`Failed to fetch (Status: ${response.status})`);
 
         const data = await response.json();
 
@@ -50,7 +51,9 @@ const Product = () => {
   }, [id]);
 
   const handleQuantityChange = (operation) => {
-    setQuantity((prev) => Math.max(1, operation === "increment" ? prev + 1 : prev - 1));
+    setQuantity((prev) =>
+      Math.max(1, operation === "increment" ? prev + 1 : prev - 1)
+    );
   };
 
   const calculatePrice = () => {
@@ -80,17 +83,24 @@ const Product = () => {
 
     navigate("/cart");
   };
+  const handleTryOn = () => {
+    if (!product?.imodel) return;
+    navigate("/try-on", { state: { clothingImage: product.imodel } });
+  };
 
-  if (loading) return <div className="container mx-auto px-4 py-8">Loading...</div>;
-  if (error) return (
-    <div className="container mx-auto px-4 py-8 text-red-500">
-      <p>Error: {error}</p>
-      <a href="/shop" className="text-blue-600 hover:underline mt-4 block">
-        Return to Shop
-      </a>
-    </div>
-  );
-  if (!product) return <div className="container mx-auto px-4 py-8">Product not found</div>;
+  if (loading)
+    return <div className="container mx-auto px-4 py-8">Loading...</div>;
+  if (error)
+    return (
+      <div className="container mx-auto px-4 py-8 text-red-500">
+        <p>Error: {error}</p>
+        <a href="/shop" className="text-blue-600 hover:underline mt-4 block">
+          Return to Shop
+        </a>
+      </div>
+    );
+  if (!product)
+    return <div className="container mx-auto px-4 py-8">Product not found</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -119,7 +129,9 @@ const Product = () => {
                   key={size}
                   onClick={() => setSelectedSize(size)}
                   className={`p-3 border rounded-lg text-center ${
-                    selectedSize === size ? "bg-black text-white" : "hover:bg-gray-100"
+                    selectedSize === size
+                      ? "bg-black text-white"
+                      : "hover:bg-gray-100"
                   }`}
                 >
                   {size}
@@ -136,10 +148,22 @@ const Product = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">Product Details</h3>
             <div className="grid grid-cols-2 gap-4">
-              <div><p className="font-medium">Fabric:</p><p>{product.fabric}</p></div>
-              <div><p className="font-medium">Pattern:</p><p>{product.pattern}</p></div>
-              <div><p className="font-medium">Net Quantity:</p><p>{product.netQuantity}</p></div>
-              <div><p className="font-medium">Sizes:</p><p>{product.sizes.join(", ")}</p></div>
+              <div>
+                <p className="font-medium">Fabric:</p>
+                <p>{product.fabric}</p>
+              </div>
+              <div>
+                <p className="font-medium">Pattern:</p>
+                <p>{product.pattern}</p>
+              </div>
+              <div>
+                <p className="font-medium">Net Quantity:</p>
+                <p>{product.netQuantity}</p>
+              </div>
+              <div>
+                <p className="font-medium">Sizes:</p>
+                <p>{product.sizes.join(", ")}</p>
+              </div>
             </div>
           </div>
 
@@ -169,14 +193,22 @@ const Product = () => {
               className="bg-black text-white px-8 py-4 rounded-lg w-full hover:bg-gray-800 disabled:opacity-50"
               disabled={!selectedSize}
             >
-              {selectedSize ? `Add ${quantity} to Cart - ₹${calculatePrice()}` : "Select Size"}
+              {selectedSize
+                ? `Add ${quantity} to Cart - ₹${calculatePrice()}`
+                : "Select Size"}
+            </button>
+            <button
+              onClick={handleTryOn}
+              className="bg-blue-600 text-white px-8 py-4 rounded-lg w-full hover:bg-dark"
+            >
+              Try On
             </button>
             <button
               onClick={() =>
                 navigate("/prodsummary", {
                   state: {
                     product: {
-                      id: product.id,  
+                      id: product.id,
                       name: product.name,
                       price: calculatePrice(),
                     },

@@ -53,9 +53,6 @@ function App() {
         <Route path="/ordersuccess" element={<OrderSuccess />} />
         <Route path="/prodsummary" element={<ProdSummary />} />
         <Route path="/try-on" element={<Avatar />} />
-
-
-       
         </Route>
       </Routes>
       <Footer />
