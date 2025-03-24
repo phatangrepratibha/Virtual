@@ -10,7 +10,7 @@ export const AppContent = createContext();
 export const AppContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  // const [cartCount, setCartCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -18,12 +18,12 @@ export const AppContextProvider = ({ children }) => {
         const response = await getAuthUser();
         setUserData(response.user);
         setIsLoggedIn(true);
-        // setCartCount(response.user.cartCount || 0);
+        setCartCount(response.user.cartCount || 0);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
         setIsLoggedIn(false);
         setUserData(null);
-        // setCartCount(0);
+        setCartCount(0);
       }
     };
     checkAuthStatus();
@@ -35,7 +35,7 @@ export const AppContextProvider = ({ children }) => {
       localStorage.setItem("token", response.token);
       setUserData(response.user);
       setIsLoggedIn(true);
-      // setCartCount(response.user.cartCount || 0);
+      setCartCount(response.user.cartCount || 0);
     } catch (error) {
       throw error;
     }

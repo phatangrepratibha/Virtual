@@ -48,7 +48,7 @@ const Slider = () => {
   };
 
   return (
-    <div className="relative w-full h-[700px] overflow-hidden rounded-md">
+    <div className="relative max-w-full h-[570px] overflow-hidden rounded-md">
       {/* Slider Container */}
       <div
         className="flex w-full h-full transition-transform duration-700 ease-in-out"

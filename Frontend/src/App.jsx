@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./components/Home";
 import Shop from "./components/Shop";
 import ItemHome from "./components/ItemHome";
 import Contactus from "./components/Contactus";
@@ -21,6 +20,7 @@ import Avatar from "./components/Avatar";
 import { useState } from "react";
 import ForgetPassword from "./components/ForgetPassword";
 import VerifyEmail from "./components/VerifyEmail";
+import Home from "./pages/Home";
 
 function App() {
 

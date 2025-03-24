@@ -6,14 +6,15 @@ import { AuthProvider } from "./store/auth.jsx";
 import { ToastContainer, Bounce, Slide, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { AppContextProvider } from "./context/AppContext.jsx";
+import { CombinedProvider } from "./context/CombinedProvider.jsx";
+// import { AppContextProvider } from "./context/AppContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <StrictMode>
-      <AppContextProvider>
+      <CombinedProvider>
         <App />
-      </AppContextProvider>
+      </CombinedProvider>
       <ToastContainer
         position="top-center"
         autoClose={2000}
