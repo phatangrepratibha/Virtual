@@ -1,37 +1,52 @@
-import User from "../models/user-model.js";
-import jwt from "jsonwebtoken"
+import { verifyJWTToken } from "../utils/jwt.js";
 
+export const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  console.log("authHeader: ",authHeader);
+  
+  const token =
+    req.cookies.token ||
+    (authHeader && authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : null);
 
+  console.log("Token: ", token);
+  if (!token) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized! No token provided." });
+  }
 
-export const authMiddleware=async(req,res,next)=>{
-    const token=req.header("Authorization");
-
-    if(!token)
-    {
-        return res.status(401).json({message:"unauthorized http,token not provided"});
+  try {
+    const decoded = verifyJWTToken(token);
+    if (!decoded) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Invalid or expired token!" });
     }
 
-    const jwtToken=token.replace("Bearer","").trim();
-    console.log(jwtToken);
+    console.log("Decoded Token: ", decoded);
+    req.user = decoded;
+    console.log(req.user);
+    next();
+  } catch (error) {
+    console.error("JWT Verification Error:", error);
 
-    try {
-
-        const isVerfied=jwt.verify(jwtToken,process.env.secret_key);
-        console.log(isVerfied);
-
-        const userData=await User.findOne({email:isVerfied.email}).select({
-            password:0,
-        });
-
-        req.token=token;
-        req.user=userData;
-        req.userId=userData._id;
-
-        next();
-        
-    } catch (error) {
-      return res.status(401).json({message:"unauthorized invalid token"});  
+    if (error.name === "TokenExpiredError") {
+      return res.status(403).json({
+        success: false,
+        message: "Token expired! Please log in again.",
+      });
     }
+
+    if (error.name === "JsonWebTokenError") {
+      return res
+        .status(403)
+        .json({ success: false, message: "Invalid token!" });
+    }
+
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error!" });
+  }
 };
-
-export default authMiddleware;

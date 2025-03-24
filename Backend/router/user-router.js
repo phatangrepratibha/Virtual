@@ -1,15 +1,44 @@
-import express from "express"
-import {register,login,user} from "../controller/user-controller.js";
-import validate from "../middleware/validate-middleware.js";
-import { signupSchema } from "../validate/auth-validate.js";
-import { loginSchema } from "../validate/auth-validate.js";
-import authMiddleware from "../middleware/auth-middleware.js";
+import express from "express";
+import {
+  register,
+  login,
+  getAuthUser,
+  logout,
+  verifyEmail,
+  resendVerificationEmail,
+  sendResetPassCode,
+  resetPassword,
+  resendResetPassCode,
+} from "../controller/user-controller.js";
+import { verifyToken } from "../middleware/auth-middleware.js";
+import {
+  emailValidation,
+  loginValidation,
+  resendVerificationEmailValidation,
+  resetPasswordValidation,
+  sendResetPassCodeValidation,
+  signupValidation,
+  verifyEmailValidation,
+} from "../middleware/validate-middleware.js";
 
-const router=express.Router()
+const authRouter = express.Router();
 
-router.route("/register").post(validate(signupSchema),register);
-router.route("/login").post(validate(loginSchema),login);
-router.route("/user").get(authMiddleware,user);
+authRouter.get("/me", verifyToken, getAuthUser);
+authRouter.post("/register", signupValidation, register);
+authRouter.post("/login", loginValidation, login);
+authRouter.post("/logout", verifyToken, logout);
+authRouter.post("/verifyEmail", verifyEmailValidation, verifyEmail);
+authRouter.post(
+  "/resendCode",
+  resendVerificationEmailValidation,
+  resendVerificationEmail
+);
+authRouter.post(
+  "/sendResetPassCode",
+  sendResetPassCodeValidation,
+  sendResetPassCode
+);
+authRouter.post("/resetPass", resetPasswordValidation, resetPassword);
+authRouter.post("/resendResetPassCode", emailValidation, resendResetPassCode);
 
-export default router;
-
+export default authRouter;

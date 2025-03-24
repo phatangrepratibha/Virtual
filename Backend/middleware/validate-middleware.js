@@ -1,23 +1,107 @@
+import Joi from "joi";
+import PasswordComplexity from "joi-password-complexity";
 
-export const validate=(schema)=>async(req,res,next)=>{
-    try {
-      const parseBody=await schema.parseAsync(req.body);
-      req.body=parseBody
-      return next();
+const PasswordComplexityOptions = {
+  min: 8,
+  max: 30,
+  upperCase: 1,
+  lowerCase: 1,
+  numeric: 1,
+  symbol: 1,
+  requirementCount: 4,
+};
 
-    } catch (err) {
-      const status=422;
-      const message="fill the input properly";
-      const extraDetails=err.issues.map((curElem)=>curElem.message);
+const validatePassword = () => {
+  return PasswordComplexity(PasswordComplexityOptions).required().messages({
+    "passwordComplexity.tooShort":
+      "Password must be at least 8 characters long!",
+    "passwordComplexity.tooLong": "Password cannot exceed 30 characters!",
+    "passwordComplexity.upperCase":
+      "Password must contain at least one uppercase letter!",
+    "passwordComplexity.lowerCase":
+      "Password must contain at least one lowercase letter!",
+    "passwordComplexity.numeric": "Password must contain at least one number!",
+    "passwordComplexity.symbol": "Password must contain at least one symbol!",
+  });
+};
 
-      const error={
-        status,
-        message,
-        extraDetails
-      };
-      next(error)
-      console.log(error)
-    }
-}
+const emailSchema = Joi.string().trim().email().required().messages({
+  "string.empty": "Email is required!",
+  "string.email": "Invalid email address!",
+});
 
-export default validate
+const codeSchema = Joi.string().length(6).required().messages({
+  "string.empty": "Verification code is required!",
+  "string.length": "Verification code must be exactly 6 characters long!",
+});
+
+const validateRequest = (schema) => (req, res, next) => {
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const errors = error.details.map((err) => ({
+      field: err.context.key, // Field causing the error
+      message: err.message, // Error message
+    }));
+
+    return res.status(400).json({
+      success: false,
+      message: "Validation Error",
+      errors,
+    });
+  }
+  next();
+};
+
+export const signupValidation = validateRequest(
+  Joi.object({
+    username: Joi.string().trim().min(2).max(50).required().messages({
+      "string.empty": "Name is Required!",
+      "string.min": "Name must be atleast 2 characters long!",
+      "string.max": "Name cannot exceed 50 characters",
+    }),
+    email: emailSchema,
+    password: validatePassword(),
+  })
+);
+
+export const loginValidation = validateRequest(
+  Joi.object({
+    email: emailSchema,
+    password: Joi.string()
+      .required()
+      .messages({ "string.empty": "Password is Required" }),
+  })
+);
+
+export const emailValidation = validateRequest(
+  Joi.object({
+    email: emailSchema,
+  })
+);
+
+export const verifyEmailValidation = validateRequest(
+  Joi.object({
+    email: emailSchema,
+    code: codeSchema,
+  })
+);
+
+export const resendVerificationEmailValidation = validateRequest(
+  Joi.object({
+    email: emailSchema,
+  })
+);
+
+export const sendResetPassCodeValidation = validateRequest(
+  Joi.object({
+    email: emailSchema,
+  })
+);
+
+export const resetPasswordValidation = validateRequest(
+  Joi.object({
+    email: emailSchema,
+    code: codeSchema,
+    newPass: validatePassword(),
+  })
+);

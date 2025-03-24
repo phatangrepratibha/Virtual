@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
-import Login from "./components/Login";
-import Register from "./components/Register";
 import Shop from "./components/Shop";
 import ItemHome from "./components/ItemHome";
 import Contactus from "./components/Contactus";
@@ -11,7 +9,6 @@ import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import Categories from "./components/Categories";
 import AboutUs from "./components/AboutUs";
-import Logout from "./components/Logout";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import Pslider from "./components/Pslider";
 import Product from "./components/Product";
@@ -21,15 +18,24 @@ import OrderSuccess from "./components/OrderSuccess";
 import ProdSummary from "./components/prodSummary";
 import Avatar from "./components/Avatar";
 
+import { useState } from "react";
+import ForgetPassword from "./components/ForgetPassword";
+import VerifyEmail from "./components/VerifyEmail";
+
 function App() {
+
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar
+      isAuthModalOpen={isAuthModalOpen}
+      setIsAuthModalOpen={setIsAuthModalOpen}
+       />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/logout" element={<Logout />} />
+        <Route path="/forgetpass" element={<ForgetPassword />} />
+        <Route path="/verify" element={<VerifyEmail />} />
 
         <Route element={<ProtectedRoutes/>}>
 
