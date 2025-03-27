@@ -16,6 +16,16 @@ const Navbar = () => {
   const { cartCount } = useCart();
   console.log("cartCount: ", cartCount);
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e) => {
+    e?.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+    }
+  };
+
   useEffect(() => {
     if (isLoggedIn) {
       const fetchUser = async () => {
@@ -30,12 +40,6 @@ const Navbar = () => {
       fetchUser();
     }
   }, [isLoggedIn]);
-
-  useEffect(() => {
-    if (cartCount) {
-      console.log("Cart count updated:", cartCount);
-    }
-  }, [cartCount]);
 
   const logout = () => {
     handleLogout();
@@ -124,30 +128,35 @@ const Navbar = () => {
         </div>
         <div className="navbar-end flex items-center gap-4">
           {/* Search Field */}
-          <label className="input flex items-center gap-2 border rounded px-2 py-1">
-            <svg
-              className="h-[1em] opacity-50"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2.5"
-                fill="none"
-                stroke="currentColor"
+          <form onSubmit={handleSearch} className="flex items-center gap-2">
+            <label className="input flex items-center gap-2 border rounded px-2 py-1">
+              <svg
+                className="h-[1em] opacity-50"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
               >
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.3-4.3"></path>
-              </g>
-            </svg>
-            <input
-              type="search"
-              required
-              placeholder="Search"
-              className="outline-none"
-            />
-          </label>
+                <g
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </g>
+              </svg>
+              <input
+                type="search"
+                placeholder="Search products..."
+                className="outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch(e)}
+                aria-label="Search products"
+              />
+            </label>
+          </form>
           {/* Cart Icon */}
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
             <Link to="/cart" className="indicator">

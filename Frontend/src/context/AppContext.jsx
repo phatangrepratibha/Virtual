@@ -10,7 +10,6 @@ export const AppContent = createContext();
 export const AppContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -18,12 +17,10 @@ export const AppContextProvider = ({ children }) => {
         const response = await getAuthUser();
         setUserData(response.user);
         setIsLoggedIn(true);
-        setCartCount(response.user.cartCount || 0);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
         setIsLoggedIn(false);
         setUserData(null);
-        setCartCount(0);
       }
     };
     checkAuthStatus();
@@ -47,23 +44,10 @@ export const AppContextProvider = ({ children }) => {
       localStorage.removeItem("token");
       setIsLoggedIn(false);
       setUserData(null);
-      // setCartCount(0);
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-
-  // const addToCart = (quantity = 1) => {
-  //   setCartCount((prevCount) => prevCount + quantity);
-  // };
-
-  // const removeFromCart = (quantity = 1) => {
-  //   setCartCount((prevCount) => Math.max(0, prevCount - quantity));
-  // };
-
-  // const updateCartCount = (count) => {
-  //   setCartCount(count);
-  // };
 
   const contextValue = useMemo(
     () => ({
@@ -71,14 +55,9 @@ export const AppContextProvider = ({ children }) => {
       setIsLoggedIn,
       userData,
       setUserData,
-      // cartCount,
-      // addToCart,
-      // removeFromCart,
-      // updateCartCount,
       login,
       handleLogout,
     }),
-    // [isLoggedIn, userData, cartCount]
     [isLoggedIn, userData]
   );
 
